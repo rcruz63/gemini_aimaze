@@ -1,7 +1,30 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
 [project]
-name = "new-aimaze"
+name = "ndd_aimaze"
 version = "0.1.0"
 description = "AI-powered Zork-style adventure game"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "pydantic>=2.0.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "ruff>=0.1.0",
+    "black>=23.0.0",
+    "mypy>=1.0.0"
+]
+
+[tool.setuptools]
+packages = ["engine", "ai", "models", "gameplay", "tests"]
+
+[tool.ruff]
+line-length = 88
+
+[tool.black]
+line-length = 88
