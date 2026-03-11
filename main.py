@@ -1,5 +1,13 @@
+"""
+Punto de entrada principal para el juego.
+"""
+
+from gameplay.game_loop import GameLoop
+
+
 def main():
-    print("Hello from new-aimaze!")
+    game = GameLoop()
+    game.run()
 
 
 if __name__ == "__main__":
