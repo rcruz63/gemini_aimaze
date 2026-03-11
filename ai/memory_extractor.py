@@ -2,7 +2,7 @@
 AI-powered Memory Extractor to update session state based on game events.
 """
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 from ai.llm_client import LLMClient
 from models.state import MemoryUpdates, SessionState
@@ -16,9 +16,7 @@ class MemoryExtractor:
     def __init__(self, llm_client: LLMClient):
         self.llm_client = llm_client
 
-    def extract_updates(
-        self, narration: str, session: SessionState
-    ) -> Dict[str, Any]:
+    def extract_updates(self, narration: str, session: SessionState) -> Dict[str, Any]:
         """
         Analyzes narration and returns validated updates as a dictionary.
         """

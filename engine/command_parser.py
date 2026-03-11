@@ -2,8 +2,7 @@
 Semantic Command Parser using LLM.
 """
 
-import json
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 from ai.llm_client import LLMClient
 
@@ -16,9 +15,7 @@ class CommandParser:
     def __init__(self, llm_client: LLMClient):
         self.llm_client = llm_client
 
-    def parse(
-        self, user_input: str, available_actions: List[str]
-    ) -> Dict[str, str]:
+    def parse(self, user_input: str, available_actions: List[str]) -> Dict[str, str]:
         """
         Parses user input using an LLM.
         Returns a dictionary with 'action' and 'target' (optional).
@@ -41,16 +38,16 @@ class CommandParser:
             response = self.llm_client.generate_cheap(
                 prompt=user_prompt, system=system_prompt, format="json"
             )
-            
+
             # Ensure response is a dict and has 'action'
             if isinstance(response, dict) and "action" in response:
                 # Validate that the action is either 'unknown' or in available_actions
                 # Actually, the LLM might return an action that's slightly different if not careful.
                 # But let's trust the 'json' format and clear prompt for now.
                 return response
-            
+
             return {"action": "unknown"}
-            
+
         except Exception:
             # Fallback for LLM errors or unexpected output
             return {"action": "unknown"}

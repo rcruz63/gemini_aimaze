@@ -11,22 +11,24 @@ def test_event_progression():
     event = Event(
         name="bajada_oxigeno",
         description="El nivel de oxígeno cae a niveles críticos.",
-        speed=0.34
+        speed=0.34,
     )
     engine.add_event(event)
-    
-    scene = SceneState(location_description="Estás en la nave.", available_actions=["ir norte"])
-    
+
+    scene = SceneState(
+        location_description="Estás en la nave.", available_actions=["ir norte"]
+    )
+
     # Turno 1 (Progreso 0.34)
     engine.tick(scene)
     assert not event.triggered
-    assert "EVENTO" not in scene.location_description
-    
+    assert "El nivel de oxígeno cae a niveles críticos." not in scene.triggered_events
+
     # Turno 2 (Progreso 0.68)
     engine.tick(scene)
     assert not event.triggered
-    
+
     # Turno 3 (Progreso 1.02 -> 1.0, triggered)
     engine.tick(scene)
     assert event.triggered
-    assert "El nivel de oxígeno cae" in scene.location_description
+    assert "El nivel de oxígeno cae a niveles críticos." in scene.triggered_events

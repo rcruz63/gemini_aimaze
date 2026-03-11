@@ -9,10 +9,12 @@ from models.state import WorldState, SessionState, SceneState
 
 def test_room_serialization():
     """Valida la creación y serialización de una Room a JSON."""
-    room = Room(room_id="sala_1", description="Una sala oscura", exits={"norte": "sala_2"})
+    room = Room(
+        room_id="sala_1", description="Una sala oscura", exits={"norte": "sala_2"}
+    )
     json_data = room.model_dump_json()
     data = json.loads(json_data)
-    
+
     assert data["room_id"] == "sala_1"
     assert data["description"] == "Una sala oscura"
     assert data["exits"]["norte"] == "sala_2"
@@ -29,7 +31,9 @@ def test_world_state_serialization():
 
 def test_session_state_serialization():
     """Valida la creación y serialización del SessionState."""
-    state = SessionState(location="sala_1", inventory=["llave"], npcs_conocidos=["guardia"])
+    state = SessionState(
+        location="sala_1", inventory=["llave"], npcs_conocidos=["guardia"]
+    )
     data = json.loads(state.model_dump_json())
     assert data["location"] == "sala_1"
     assert "llave" in data["inventory"]
@@ -41,7 +45,7 @@ def test_scene_state_serialization():
     state = SceneState(
         location_description="Estás en un pasillo iluminado",
         active_npcs=["guardia"],
-        available_actions=["ir norte", "atacar guardia"]
+        available_actions=["ir norte", "atacar guardia"],
     )
     data = json.loads(state.model_dump_json())
     assert "pasillo iluminado" in data["location_description"]

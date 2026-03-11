@@ -11,14 +11,14 @@ class MapEngine:
     Gestiona el grafo de habitaciones y sus conexiones.
     Asegura la coherencia espacial bidireccional de las conexiones.
     """
-    
+
     OPPOSITE_DIRECTIONS = {
         "norte": "sur",
         "sur": "norte",
         "este": "oeste",
         "oeste": "este",
         "arriba": "abajo",
-        "abajo": "arriba"
+        "abajo": "arriba",
     }
 
     def __init__(self) -> None:
@@ -36,7 +36,9 @@ class MapEngine:
         Asegura automáticamente la conexión inversa desde B hacia A.
         """
         if room_id_a not in self.rooms or room_id_b not in self.rooms:
-            raise ValueError("Ambas habitaciones deben estar añadidas al MapEngine antes de conectarlas.")
+            raise ValueError(
+                "Ambas habitaciones deben estar añadidas al MapEngine antes de conectarlas."
+            )
 
         if direction not in self.OPPOSITE_DIRECTIONS:
             raise ValueError(f"Dirección no válida: {direction}")

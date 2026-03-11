@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **Fase 3 - Sistemas Autónomos (El Mundo Vivo)**:
+    - Actualizado `gameplay/game_loop.py` para procesar el motor de NPCs solo para los agentes presentes en la sala actual.
+    - Refactorizado `engine/event_engine.py` para separar los eventos disparados y actualizar `SceneState` (Motor de simulación avanzado).
+    - Actualizado System Prompt de `ai/narrator_ai.py` para obligar al narrador a tejer las acciones de los NPCs y eventos disparados.
+    - Añadida acción semántica "esperar" en el parser y `game_loop` para observar el paso del tiempo.
+    - Implementado `ai/npc_ai.py` (NPCDecisionAI) para que los NPCs decidan acciones de forma autónoma usando IA barata.
+    - Evolución del modelo `NPC`: Creados `NPCState` y `NPCAction` en `models/state.py` para representar la mente de los agentes.
+    - Actualizado `SceneState` para registrar `npc_actions` y `triggered_events`.
+    - Inicializados NPCs (Lysa y Rurik) en `GameLoop`.
 - **Fase 2 - Integración de IA Real**:
     - Implementación de `ai/llm_client.py` para interactuar con Ollama (Cliente Agnóstico).
     - Añadida dependencia `ollama` vía `uv`.

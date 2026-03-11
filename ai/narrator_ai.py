@@ -14,7 +14,9 @@ class NarratorAI:
     def __init__(self, llm_client: LLMClient):
         self.llm_client = llm_client
 
-    def generate_scene(self, scene_state: SceneState, last_action_result: str = "") -> str:
+    def generate_scene(
+        self, scene_state: SceneState, last_action_result: str = ""
+    ) -> str:
         """
         Generates narrative based on scene state and the last engine action.
         """
@@ -34,7 +36,10 @@ class NarratorAI:
             f"Location: {scene_state.location_description}\n"
             f"Active NPCs: {scene_state.active_npcs}\n"
             f"Available Actions: {scene_state.available_actions}\n"
-            f"Result of last action: {last_action_result}"
+            f"Result of last action: {last_action_result}\n"
+            f"NPC Actions this turn: {scene_state.npc_actions}\n"
+            f"Triggered Events this turn: {scene_state.triggered_events}\n"
+            "INSTRUCCIÓN OBLIGATORIA: Debes tejer las 'NPC Actions' y 'Triggered Events' orgánicamente dentro de la narrativa si existen."
         )
 
         try:

@@ -2,8 +2,6 @@
 Narrative Director AI to manage pacing, tension, and scene goals.
 """
 
-from typing import Any, Dict
-
 from ai.llm_client import LLMClient
 from models.state import DirectorDirectives, SceneState, SessionState
 

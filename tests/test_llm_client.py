@@ -2,7 +2,7 @@
 Tests for LLMClient.
 """
 
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pytest
 
@@ -18,9 +18,7 @@ def mock_ollama_client():
 def test_generate_cheap_text(mock_ollama_client):
     # Setup mock
     mock_instance = mock_ollama_client.return_value
-    mock_instance.chat.return_value = {
-        "message": {"content": "Cheap response text"}
-    }
+    mock_instance.chat.return_value = {"message": {"content": "Cheap response text"}}
 
     client = LLMClient()
     response = client.generate_cheap("Hello")
