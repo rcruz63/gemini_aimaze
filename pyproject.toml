@@ -1,0 +1,7 @@
+[project]
+name = "new-aimaze"
+version = "0.1.0"
+description = "AI-powered Zork-style adventure game"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
