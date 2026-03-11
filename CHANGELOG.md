@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Motor de mapas (`MapEngine`) con validación de coherencia espacial matemática (Fase 3).
 - Modelos de estado estructurado (WorldState, SessionState, SceneState, Room) con Pydantic.
 - Estructura base del proyecto (engine, ai, models, gameplay, tests).
 - Configuración de `pyproject.toml` con Pydantic y Pytest.
