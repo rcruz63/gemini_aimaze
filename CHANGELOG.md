@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Motor de eventos temporales (`EventEngine`) para simular un mundo vivo (Fase 6).
 - Motor de puzzles (`PuzzleEngine`) y plantilla de Llave y Cerradura (Fase 5).
 - Parser de comandos determinista y Bucle de juego MVP (Fase 4).
 - Motor de mapas (`MapEngine`) con validación de coherencia espacial matemática (Fase 3).
