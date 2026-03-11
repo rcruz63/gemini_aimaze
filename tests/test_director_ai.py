@@ -32,8 +32,8 @@ def test_generate_directives_success(mock_llm_client):
     
     directives = director.generate_directives(session, scene)
     
-    assert directives["tension_level"] == 7
-    assert directives["scene_goal"] == "reveal hidden truth"
+    assert directives.tension_level == 7
+    assert directives.scene_goal == "reveal hidden truth"
     mock_llm_client.generate_cheap.assert_called_once()
 
 
@@ -48,5 +48,5 @@ def test_generate_directives_fallback_on_error(mock_llm_client):
     directives = director.generate_directives(session, scene)
     
     # Check fallback values
-    assert "tension_level" in directives
-    assert directives["tension_level"] == 3
+    assert hasattr(directives, "tension_level")
+    assert directives.tension_level == 3

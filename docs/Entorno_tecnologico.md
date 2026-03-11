@@ -16,6 +16,7 @@
 - Se utilizará ollama en entorno de desarrollo. Y openAI en entorno de producción.
 - Se debe usar early returns para reducir la complejidad.
 - El jugador principal se expresa en Español de España, debe ser el lenguaje del juego.
+- **Regla de Oro de JSON Estricto:** Toda salida de un modelo de lenguaje (LLM) destinada a modificar el estado del juego o guiar la narrativa debe ser validada mediante un modelo Pydantic específico antes de ser procesada por el motor. Queda prohibida la inyección directa de diccionarios JSON crudos provenientes de la IA.
 
 ### Commits
 

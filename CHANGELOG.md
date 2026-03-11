@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Actualizado `ai/narrator_ai.py` con conexión real al modelo narrativo de Ollama, con tono humorístico de 8-bits y límite de palabras.
     - Refactorizado `gameplay/game_loop.py` para orquestar el flujo completo de la Fase 2: Parser -> Motor -> Director -> Narrador -> Extractor de Memoria.
     - Implementado sistema de reintentos y menú de fallback en el Parser Semántico.
+    - Actualizado System Prompt de `ai/narrator_ai.py` con reglas estrictas anti-alucinaciones.
+    - Corregido el orden de impresión en `gameplay/game_loop.py` para mostrar la resolución del motor antes de la descripción narrativa.
 - Spike de validación visual de la consola y Narrador Mock (Fase 7).
 - Motor de eventos temporales (`EventEngine`) para simular un mundo vivo (Fase 6).
 - Motor de puzzles (`PuzzleEngine`) y plantilla de Llave y Cerradura (Fase 5).

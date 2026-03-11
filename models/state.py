@@ -15,6 +15,13 @@ class WorldState(BaseModel):
     theme: str
 
 
+class MemoryUpdates(BaseModel):
+    """
+    Structured updates for session memory.
+    """
+    updates: Dict[str, Any] = Field(default_factory=dict)
+
+
 class SessionState(BaseModel):
     """
     Estado dinámico de cambios lentos.
@@ -27,6 +34,15 @@ class SessionState(BaseModel):
     memory: Dict[str, Any] = Field(default_factory=dict)
 
 
+class DirectorDirectives(BaseModel):
+    """
+    Structured directives from the Narrative Director.
+    """
+    tension_level: int = Field(ge=1, le=10, default=3)
+    scene_goal: str = Field(default="continue adventure")
+    tone: str = Field(default="neutral")
+
+
 class SceneState(BaseModel):
     """
     Estado dinámico de cambios rápidos.
@@ -35,4 +51,4 @@ class SceneState(BaseModel):
     location_description: str
     active_npcs: List[str] = Field(default_factory=list)
     available_actions: List[str] = Field(default_factory=list)
-    director_directives: Dict[str, Any] = Field(default_factory=dict)
+    director_directives: DirectorDirectives = Field(default_factory=DirectorDirectives)

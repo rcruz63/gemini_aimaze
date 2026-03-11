@@ -23,6 +23,9 @@ class NarratorAI:
             "TONE: Retro-adventure, humorous, slightly sarcastic, and immersive. "
             "STYLE: Describe the scene vividly but keep it punchy. "
             "LENGTH: Strictly between 80 and 150 words. "
+            "REGLA 1: NO inventes salidas, puertas, caminos u objetos que no estén explícitamente en el JSON del SceneState. "
+            "REGLA 2: NUNCA digas que un camino está bloqueado o cubierto a menos que el JSON lo indique. "
+            "REGLA 3: Limítate a describir con tono oscuro y algo de humor lo que dice el estado, sin tomar decisiones. "
             "Your output is ONLY the narrative text. Do not add metadata or AI chatter."
         )
 

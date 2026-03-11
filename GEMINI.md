@@ -6,6 +6,7 @@
 ### Key Architecture Principles
 - **Deterministic Core:** The game engine manages the "truth" (inventory, location, connectivity, puzzle status) without AI hallucination.
 - **AI Narrative Layer:** AI interprets the engine's state to generate immersive descriptions and handle NPC interactions.
+- **Strict JSON Rule (CRITICAL):** Every LLM output intended to modify game state or guide narrative MUST be validated with a specific Pydantic model before processing. Direct injection of raw LLM JSON into the engine or state is strictly forbidden.
 - **Token Efficiency:** Uses a structured, three-tier JSON state management system (World, Session, Scene) instead of sending full chat histories to the LLM, achieving 10-20x token reduction.
 - **Director AI:** A specialized AI agent that manages pacing, tension, and world events.
 

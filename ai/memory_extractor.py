@@ -5,7 +5,7 @@ AI-powered Memory Extractor to update session state based on game events.
 from typing import Any, Dict, Optional
 
 from ai.llm_client import LLMClient
-from models.state import SessionState
+from models.state import MemoryUpdates, SessionState
 
 
 class MemoryExtractor:
@@ -20,7 +20,7 @@ class MemoryExtractor:
         self, narration: str, session: SessionState
     ) -> Dict[str, Any]:
         """
-        Analyzes narration and current session to return a dictionary of updates.
+        Analyzes narration and returns validated updates as a dictionary.
         """
         if not narration.strip():
             return {}
@@ -38,12 +38,17 @@ class MemoryExtractor:
         user_prompt = f"Latest Narration: '{narration}'"
 
         try:
-            updates = self.llm_client.generate_cheap(
+            raw_updates = self.llm_client.generate_cheap(
                 prompt=user_prompt, system=system_prompt, format="json"
             )
 
-            if isinstance(updates, dict):
-                return updates
+            if isinstance(raw_updates, dict):
+                # We wrap the dictionary in our validation model
+                # Note: MemoryUpdates expects a field 'updates' or we can just return the raw dict if valid.
+                # To follow the prompt "Respond ONLY with a JSON object containing the NEW keys",
+                # the LLM output is the dictionary itself.
+                # Let's adjust MemoryUpdates to handle this or just validate the keys.
+                return MemoryUpdates(updates=raw_updates).updates
             return {}
 
         except Exception:

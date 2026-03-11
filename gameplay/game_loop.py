@@ -89,6 +89,9 @@ class GameLoop:
             self.session_state.memory.update(updates)
             
             # Display output
+            if self.last_action_result and self.last_action_result != "Welcome to ndd_aimaze.":
+                print(f"\033[93m{self.last_action_result}\033[0m\n")
+                
             print(f"\033[92m--- {current_room.room_id.upper()} ---\033[0m")
             print(f"\033[92m{narrative}\033[0m")
             
