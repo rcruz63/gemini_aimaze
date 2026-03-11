@@ -2,7 +2,7 @@
 Modelos de estado estructurado del juego: World, Session y Scene.
 """
 
-from typing import List
+from typing import Any, Dict, List
 from pydantic import BaseModel, Field
 
 
@@ -24,6 +24,7 @@ class SessionState(BaseModel):
     location: str
     inventory: List[str] = Field(default_factory=list)
     npcs_conocidos: List[str] = Field(default_factory=list)
+    memory: Dict[str, Any] = Field(default_factory=dict)
 
 
 class SceneState(BaseModel):
@@ -34,3 +35,4 @@ class SceneState(BaseModel):
     location_description: str
     active_npcs: List[str] = Field(default_factory=list)
     available_actions: List[str] = Field(default_factory=list)
+    director_directives: Dict[str, Any] = Field(default_factory=dict)

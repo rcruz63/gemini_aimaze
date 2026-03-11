@@ -1,21 +1,43 @@
 """
-Narrador AI Mock para la validación visual de la consola (Spike 1).
+Narrative AI to generate immersive descriptions based on game state and director directives.
 """
 
+from ai.llm_client import LLMClient
 from models.state import SceneState
 
 
-class NarratorMock:
-    """Simula las respuestas de la IA sin consumir tokens."""
-    
-    def generate_scene(self, scene_state: SceneState) -> str:
+class NarratorAI:
+    """
+    Generates rich narrative text using a powerful LLM.
+    """
+
+    def __init__(self, llm_client: LLMClient):
+        self.llm_client = llm_client
+
+    def generate_scene(self, scene_state: SceneState, last_action_result: str = "") -> str:
         """
-        Recibe el SceneState estructurado y devuelve un string narrativo hardcodeado.
+        Generates narrative based on scene state and the last engine action.
         """
-        desc = scene_state.location_description
-        
-        narrative = f"{desc}\n"
-        if scene_state.available_actions:
-            narrative += "\nOpciones de movimiento: " + ", ".join(scene_state.available_actions)
-        
-        return narrative
+        system_prompt = (
+            "You are the Narrator of an 8-bit text adventure game. "
+            "TONE: Retro-adventure, humorous, slightly sarcastic, and immersive. "
+            "STYLE: Describe the scene vividly but keep it punchy. "
+            "LENGTH: Strictly between 80 and 150 words. "
+            "Your output is ONLY the narrative text. Do not add metadata or AI chatter."
+        )
+
+        user_prompt = (
+            f"Director Directives: {scene_state.director_directives}\n"
+            f"Location: {scene_state.location_description}\n"
+            f"Active NPCs: {scene_state.active_npcs}\n"
+            f"Available Actions: {scene_state.available_actions}\n"
+            f"Result of last action: {last_action_result}"
+        )
+
+        try:
+            narrative = self.llm_client.generate_expensive(
+                prompt=user_prompt, system=system_prompt
+            )
+            return narrative
+        except Exception as e:
+            return f"The narration glitched (AI Error): {str(e)}\n{scene_state.location_description}"
