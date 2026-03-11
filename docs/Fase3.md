@@ -1,24 +1,19 @@
 # FASE3_IMPLEMENTACION.md
-# Guía de Ejecución para la Fase 3: Autonomous Systems
+# Guía de Ejecución para la Fase 3: Sistemas Autónomos (El Mundo Vivo)
 
-**Objetivo:** Sustituir los *mocks* por llamadas reales a modelos de lenguaje locales usando la librería `ollama`, implementando el Parser Semántico, el Director, el Narrador y el Extractor de Memoria.
+**Objetivo:** Implementar el motor de decisión de NPCs y la simulación avanzada de eventos para que el mundo sea proactivo, sin disparar los costes de la API.
 
-*Instrucción para el humano:* Pasa cada uno de estos "Prompts" a la herramienta CLI de forma secuencial. No pases al siguiente hasta que los tests del anterior estén en verde.
+#### 🧬 Prompt 1: Evolución del Modelo NPC
+> "Actualiza los modelos de datos en `models/state.py` para los NPCs. Un NPC ya no es solo un nombre; debe ser un agente estructurado. Añade los campos: `personality` (lista de strings), `goal` (string), `secret` (string, opcional), `attitude_to_player` (int de 1 a 5) y `current_plan` (string). Modifica el `WorldState` o `SessionState` inicial (el de prueba) para incluir un NPC llamado 'Lysa' (mercenaria, pragmática, objetivo: ganar dinero) y otro llamado 'Rurik' (tabernero, sospechoso). Actualiza los tests y el CHANGELOG."
 
-#### 🛠️ Prompt 1: El Cliente LLM (La Pasarela)
-> "Añade la dependencia `ollama` usando `uv add` (prohibido pip). Crea el módulo `ai/llm_client.py`. Implementa una clase `LLMClient` con dos métodos: `generate_cheap(prompt, json_mode=False)` y `generate_expensive(prompt)`. Usa modelos locales genéricos (ej. 'llama3' o 'qwen2.5'). Implementa manejo de errores por si el servidor de Ollama está caído. Escribe tests unitarios usando `unittest.mock.patch` para simular las respuestas de Ollama y no depender de la red durante los tests. Actualiza el CHANGELOG y haz commit respetando Conventional Commits."
+#### 🧠 Prompt 2: El Motor de Decisión NPC (NPC Decision AI)
+> "Crea el módulo `ai/npc_ai.py`. Crea una función que reciba el `SceneState` actual y los datos de un único NPC. Usa `LLMClient.generate_cheap(json_mode=True)`. El prompt debe pedirle a la IA que decida la próxima acción del NPC basándose en su personalidad y objetivos, reaccionando a la acción previa del jugador. Debe devolver estrictamente un JSON: `{"action": "<acción breve>", "intent": "<motivo oculto>"}`. Escribe tests con mocks. Actualiza CHANGELOG."
 
-#### 🧠 Prompt 2: El Parser Semántico (Intent Extractor)
-> "Actualiza el `CommandParser` en `engine/` para usar `LLMClient.generate_cheap(json_mode=True)`. Debe recibir el texto libre del jugador y la lista de `available_actions` del `SceneState`. El LLM debe devolver un JSON estricto: `{"matched_action": "accion_elegida"}` o `{"matched_action": "unknown"}`. Modifica el game loop: si devuelve 'unknown', pide aclaración; si falla 2 veces, imprime las acciones válidas. Asegura que el motor siga siendo determinista (solo recibe acciones validadas). Tests obligatorios (mockeando la IA). Actualiza CHANGELOG."
+#### ⚙️ Prompt 3: Integración y Filtro de Costes (CRÍTICO)
+> "Actualiza el `gameplay/game_loop.py` para integrar las decisiones de los NPCs. REGLA INNEGOCIABLE PARA CONTROL DE COSTES: El bucle de NPCs SOLO debe iterar y llamar a `npc_ai` para los NPCs que estén PRESENTES en la sala actual (los 'scene_npcs'). Los NPCs en otras habitaciones ignoran su turno o usan lógica dummy. Recopila las acciones de los NPCs presentes y añádelas al `SceneState` bajo la clave `npc_actions` para que el Narrador las vea. Actualiza tests y CHANGELOG."
 
-#### 🎬 Prompt 3: El Director Narrativo
-> "Crea `ai/director_ai.py`. Usa `LLMClient.generate_cheap(json_mode=True)`. Debe recibir el `SessionState` y `SceneState` (en formato JSON) y decidir el rumbo dramático. Devuelve un JSON: `{"tension_level": <1-10>, "scene_goal": "<instrucción narrativa>"}`. El Director NO altera el inventario ni el mapa, solo dicta el tono. Modifica el `SceneState` para incluir este output del Director. Crea tests con mocks. Actualiza CHANGELOG."
+#### ⏳ Prompt 4: El Motor de Simulación de Eventos Avanzado
+> "Refactoriza el `EventEngine` de la Fase 1 (`engine/event_engine.py`). Permite que el `DirectorAI` o los propios NPCs puedan inyectar nuevos eventos con `progress = 0.0`. Cuando un evento llegue a `1.0`, debe generar un `event_triggered` (ej. 'Los guardias irrumpen en la sala') y añadirse al `SceneState`. Modifica el `NarratorAI` para que, si recibe `event_triggered` o `npc_actions` en el estado, los integre en la narrativa obligatoriamente. Haz tests unitarios."
 
-#### 🗣️ Prompt 4: El Narrador AI (El Alma)
-> "Refactoriza `ai/narrator_ai.py` para usar `LLMClient.generate_expensive()`. Elimina el texto hardcodeado. El System Prompt debe ser estricto: 'Eres un narrador de aventuras retro 8-bits. Usa humor oscuro. Límite: 80-150 palabras. REGLA INNEGOCIABLE: NO inventes salidas, puertas ni objetos que no estén explícitamente en el JSON provisto. Basate en el scene_goal del Director.' Pásale SOLAMENTE el `SceneState` al prompt del usuario (jamás envíes el historial del chat). Crea tests mockeando la salida. Actualiza CHANGELOG."
-
-#### 💾 Prompt 5: El Extractor de Memoria
-> "Crea `ai/memory_extractor.py`. Este módulo se llama *después* de que el Narrador hable. Usa `LLMClient.generate_cheap(json_mode=True)`. Le pasamos el texto narrado y el `SessionState`. Debe extraer información clave (ej. relaciones, pistas) y devolver un JSON con actualizaciones estructurales para aplicar al `SessionState`. Valida la salida JSON usando Pydantic para evitar errores de parseo. Tests mockeados. Actualiza CHANGELOG."
-
-#### 🔄 Prompt 6: Orquestación Final
-> "Integra todos los módulos en `gameplay/game_loop.py`. El flujo exacto por turno debe ser: 1) Input semántico del jugador -> 2) Motor actualiza estado -> 3) Eventos avanzan -> 4) Director decide tono -> 5) Narrador genera texto -> 6) Memory Extractor actualiza sesión -> 7) Imprimir texto en consola. Asegúrate de que la consola se limpia limpiamente entre turnos y de que todo funciona sin romper la coherencia del mapa. Haz una revisión de linting (max 88 chars, complejidad < 10). Último commit en CHANGELOG."
+#### 🎭 Prompt 5: La Prueba del "Turno de Espera"
+> "Añade el comando 'esperar' (o 'pasar turno') al `CommandParser`. Configura un escenario de prueba en `main.py` donde haya un evento ('oxígeno disminuyendo' a 0.8 de progreso) y un NPC hostil en la sala. El humano solo debe pulsar 'esperar'. El sistema debe procesar las intenciones del NPC, avanzar el progreso del evento a 1.0 y obligar al Narrador a describir cómo el mundo reacciona sin que el jugador haya hecho nada. Comprueba linting, complejidad < 10 y haz el último commit en CHANGELOG."
