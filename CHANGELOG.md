@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Motor de puzzles (`PuzzleEngine`) y plantilla de Llave y Cerradura (Fase 5).
 - Parser de comandos determinista y Bucle de juego MVP (Fase 4).
 - Motor de mapas (`MapEngine`) con validación de coherencia espacial matemática (Fase 3).
 - Modelos de estado estructurado (WorldState, SessionState, SceneState, Room) con Pydantic.
